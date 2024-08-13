@@ -13,18 +13,15 @@ class request_body(BaseModel):
 # Carregar o modelo pra realizar predict
 modelo_pontuacao = joblib.load('./modelo_regressao.pkl')
 
+@app.post("/predict")
 def predict(data : request_body):
     # Preparar os dados para predição
-    if(data.horas_estudo > 0):
-        input_feature = [[data.horas_estudo]]
 
-        #Realizar a predição
-        y_pred = modelo_pontuacao.predict(input_feature)[0].astype(int)
+    input_feature = [[data.horas_estudo]]
 
-        return {
-            'pontuacao_teste': y_pred.tolist()
-        }
+    #Realizar a predição
+    y_pred = modelo_pontuacao.predict(input_feature)[0].astype(int)
 
     return {
-        'pontuacao_teste': 'Horas de estudo inválida'
+        'pontuacao_teste': y_pred.tolist()
     }
